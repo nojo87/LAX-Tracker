@@ -19,23 +19,40 @@
   <h2>Noah's College Lacrosse Tracker</h2>
   <form id="entryForm">
     <div class="form-section">
-      <input placeholder="University" name="university" required>
-      <input placeholder="Coach Name" name="coachName">
-      <input placeholder="Title" name="title">
-      <select name="contactMethod"></select>
-      <input placeholder="Contact Location" name="contactLocation">
-      <input type="date" name="lastContactDate">
-      <input placeholder="Phone" name="phone">
-      <input type="email" placeholder="Email" name="email">
-      <select name="level"></select>
-      <select name="programTier"></select>
-      <select name="region"></select>
-      <select name="majorFit"></select>
-      <select name="population"></select>
-      <select name="visitPlanned"></select>
-      <input type="date" name="visitDate">
-      <input type="number" min="1" max="10" name="interest" placeholder="Interest (1–10)">
-      <textarea name="notes" placeholder="Notes"></textarea>
+      <label for="university">University</label>
+      <input id="university" placeholder="University" name="university" required>
+      <label for="coachName">Coach Name</label>
+<input id="coachName" placeholder="Coach Name" name="coachName">
+      <label for="title">Title</label>
+<input id="title" placeholder="Title" name="title">
+      <label for="contactMethod">Contact Method</label>
+<select name="contactMethod" id="contactMethod"></select>
+      <label for="contactLocation">Contact Location</label>
+<input id="contactLocation" placeholder="Contact Location" name="contactLocation">
+      <label for="lastContactDate">Last Contact Date</label>
+<input id="lastContactDate" type="date" name="lastContactDate">
+      <label for="phone">Phone</label>
+<input id="phone" placeholder="Phone" name="phone">
+      <label for="email">Email</label>
+<input type="email" id="email" placeholder="Email" name="email">
+      <label for="level">Level</label>
+<select name="level" id="level"></select>
+      <label for="programTier">Program Tier</label>
+<select name="programTier" id="programTier"></select>
+      <label for="region">Region</label>
+<select name="region" id="region"></select>
+      <label for="majorFit">Major Fit</label>
+<select name="majorFit" id="majorFit"></select>
+      <label for="population">Population</label>
+<select name="population" id="population"></select>
+      <label for="visitPlanned">Visit Planned?</label>
+<select name="visitPlanned" id="visitPlanned"></select>
+      <label for="visitDate">Visit Date</label>
+<input id="visitDate" type="date" name="visitDate">
+      <label for="interest">Interest (1–10)</label>
+<input id="interest" type="number" min="1" max="10" name="interest" placeholder="Interest (1–10)">
+      <label for="notes">Notes</label>
+<textarea id="notes" name="notes" placeholder="Notes"></textarea>
     </div>
     <div class="btn-row">
       <button type="submit" class="btn">➕ Add to Tracker</button>
