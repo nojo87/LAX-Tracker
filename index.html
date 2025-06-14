@@ -5,45 +5,56 @@
   <title>Noah's College Lacrosse Tracker</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 2rem; }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    form, table { width: 100%; margin-top: 1.5rem; }
+    table { border-collapse: collapse; }
     th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
     th { background-color: #f2f2f2; }
-    select, input { width: 100%; }
-    .btn { margin-top: 1rem; padding: 0.5rem 1rem; font-weight: bold; cursor: pointer; }
+    input, select, button, textarea { width: 100%; padding: 0.3rem; margin-bottom: 0.5rem; }
+    .form-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .btn-row { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 1rem; }
+    .btn { padding: 0.5rem 1rem; font-weight: bold; cursor: pointer; }
   </style>
 </head>
 <body>
   <h2>Noah's College Lacrosse Tracker</h2>
-  <form id="trackerForm">
-    <table>
-      <thead>
-        <tr>
-          <th>University</th>
-          <th>Coach Name</th>
-          <th>Title</th>
-          <th>Contact Method</th>
-          <th>Contact Location</th>
-          <th>Last Contact Date</th>
-          <th>Phone</th>
-          <th>Email</th>
-          <th>Level</th>
-          <th>Program Tier</th>
-          <th>Region</th>
-          <th>Major Fit</th>
-          <th>Population</th>
-          <th>Visit Planned?</th>
-          <th>Visit Date</th>
-          <th>Interest (1–10)</th>
-          <th>Notes</th>
-        </tr>
-      </thead>
-      <tbody id="trackerBody"></tbody>
-    </table>
-    <button type="button" class="btn" onclick="addRow()">+ Add Row</button>
-    <button type="button" class="btn" onclick="saveToLocal()">💾 Save</button>
-    <button type="button" class="btn" onclick="exportToCSV()">⬇️ Export to Excel</button>
-    <button type="button" class="btn" onclick="window.print()">🖨️ Export to PDF</button>
+  <form id="entryForm">
+    <div class="form-section">
+      <input placeholder="University" name="university" required>
+      <input placeholder="Coach Name" name="coachName">
+      <input placeholder="Title" name="title">
+      <select name="contactMethod"></select>
+      <input placeholder="Contact Location" name="contactLocation">
+      <input type="date" name="lastContactDate">
+      <input placeholder="Phone" name="phone">
+      <input type="email" placeholder="Email" name="email">
+      <select name="level"></select>
+      <select name="programTier"></select>
+      <select name="region"></select>
+      <select name="majorFit"></select>
+      <select name="population"></select>
+      <select name="visitPlanned"></select>
+      <input type="date" name="visitDate">
+      <input type="number" min="1" max="10" name="interest" placeholder="Interest (1–10)">
+      <textarea name="notes" placeholder="Notes"></textarea>
+    </div>
+    <div class="btn-row">
+      <button type="submit" class="btn">➕ Add to Tracker</button>
+      <button type="button" class="btn" onclick="saveToLocal()">💾 Save</button>
+      <button type="button" class="btn" onclick="exportToCSV()">⬇️ Export to Excel</button>
+      <button type="button" class="btn" onclick="window.print()">🖨️ Export to PDF</button>
+    </div>
   </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>University</th><th>Coach Name</th><th>Title</th><th>Contact Method</th><th>Contact Location</th><th>Last Contact Date</th>
+        <th>Phone</th><th>Email</th><th>Level</th><th>Program Tier</th><th>Region</th><th>Major Fit</th>
+        <th>Population</th><th>Visit Planned?</th><th>Visit Date</th><th>Interest</th><th>Notes</th>
+      </tr>
+    </thead>
+    <tbody id="trackerBody"></tbody>
+  </table>
 
   <script>
     const dropdownOptions = {
@@ -56,89 +67,60 @@
       visitPlanned: ["Yes", "No"]
     };
 
-    function createDropdown(options) {
-      const select = document.createElement('select');
-      options.forEach(option => {
+    for (const key in dropdownOptions) {
+      const select = document.querySelector(`select[name="${key}"]`);
+      dropdownOptions[key].forEach(option => {
         const opt = document.createElement('option');
         opt.value = option;
         opt.textContent = option;
         select.appendChild(opt);
       });
-      return select;
     }
 
-    function addRow(data = {}) {
+    function addRow(data) {
       const tbody = document.getElementById('trackerBody');
       const row = document.createElement('tr');
-
-      const fields = [
-        'university', 'coachName', 'title', 'contactMethod', 'contactLocation', 'lastContactDate',
-        'phone', 'email', 'level', 'programTier', 'region', 'majorFit', 'population',
-        'visitPlanned', 'visitDate', 'interest', 'notes'
-      ];
-
-      fields.forEach(field => {
-        const cell = document.createElement('td');
-        let input;
-        if (field in dropdownOptions) {
-          input = createDropdown(dropdownOptions[field]);
-        } else if (field.includes('Date')) {
-          input = document.createElement('input');
-          input.type = 'date';
-        } else if (field === 'interest') {
-          input = document.createElement('input');
-          input.type = 'number';
-          input.min = 1;
-          input.max = 10;
-        } else {
-          input = document.createElement('input');
-          input.type = field === 'email' ? 'email' : 'text';
-        }
-        input.value = data[field] || '';
-        cell.appendChild(input);
-        row.appendChild(cell);
+      const keys = Object.keys(data);
+      keys.forEach(key => {
+        const td = document.createElement('td');
+        td.textContent = data[key];
+        row.appendChild(td);
       });
-
       tbody.appendChild(row);
     }
 
+    document.getElementById('entryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const entry = Object.fromEntries(formData.entries());
+      addRow(entry);
+      this.reset();
+    });
+
     function saveToLocal() {
       const rows = Array.from(document.querySelectorAll('#trackerBody tr'));
-      const data = rows.map(row => {
-        const cells = row.querySelectorAll('td');
-        return {
-          university: cells[0].querySelector('input').value,
-          coachName: cells[1].querySelector('input').value,
-          title: cells[2].querySelector('input').value,
-          contactMethod: cells[3].querySelector('select').value,
-          contactLocation: cells[4].querySelector('input').value,
-          lastContactDate: cells[5].querySelector('input').value,
-          phone: cells[6].querySelector('input').value,
-          email: cells[7].querySelector('input').value,
-          level: cells[8].querySelector('select').value,
-          programTier: cells[9].querySelector('select').value,
-          region: cells[10].querySelector('select').value,
-          majorFit: cells[11].querySelector('select').value,
-          population: cells[12].querySelector('select').value,
-          visitPlanned: cells[13].querySelector('select').value,
-          visitDate: cells[14].querySelector('input').value,
-          interest: cells[15].querySelector('input').value,
-          notes: cells[16].querySelector('input').value
-        }
-      });
+      const data = rows.map(row => Array.from(row.cells).map(cell => cell.textContent));
       localStorage.setItem('lacrosseTracker', JSON.stringify(data));
       alert('Saved to local storage!');
     }
 
     function loadFromLocal() {
       const data = JSON.parse(localStorage.getItem('lacrosseTracker') || '[]');
-      data.forEach(entry => addRow(entry));
+      data.forEach(row => {
+        const obj = {
+          university: row[0], coachName: row[1], title: row[2], contactMethod: row[3], contactLocation: row[4],
+          lastContactDate: row[5], phone: row[6], email: row[7], level: row[8], programTier: row[9],
+          region: row[10], majorFit: row[11], population: row[12], visitPlanned: row[13], visitDate: row[14],
+          interest: row[15], notes: row[16]
+        };
+        addRow(obj);
+      });
     }
 
     function exportToCSV() {
       const headers = Array.from(document.querySelectorAll('thead th')).map(th => th.textContent);
       const rows = Array.from(document.querySelectorAll('#trackerBody tr')).map(row =>
-        Array.from(row.querySelectorAll('input, select')).map(cell => cell.value)
+        Array.from(row.querySelectorAll('td')).map(cell => cell.textContent)
       );
       let csvContent = [headers.join(',')].concat(rows.map(r => r.join(','))).join('\n');
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -153,7 +135,6 @@
     }
 
     loadFromLocal();
-    if (document.getElementById('trackerBody').rows.length === 0) addRow();
   </script>
 </body>
 </html>
