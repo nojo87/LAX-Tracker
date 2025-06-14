@@ -4,56 +4,60 @@
   <meta charset="UTF-8">
   <title>Noah's College Lacrosse Tracker</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 2rem; }
-    form, table { width: 100%; margin-top: 1.5rem; }
-    table { border-collapse: collapse; }
+    body { font-family: Arial, sans-serif; margin: 2rem; max-width: 1200px; margin-left: auto; margin-right: auto; }
+    h2 { margin-bottom: 1rem; }
+    form { display: flex; flex-direction: column; gap: 1.5rem; }
+    fieldset { border: 1px solid #ccc; padding: 1rem; border-radius: 5px; }
+    legend { font-weight: bold; padding: 0 0.5rem; }
+    .field-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+    label { font-weight: bold; margin-bottom: 0.25rem; display: block; }
+    input, select, textarea { width: 100%; padding: 0.4rem; font-size: 0.95rem; }
+    textarea { resize: vertical; }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 1rem; }
+    .btn { padding: 0.6rem 1.2rem; font-size: 1rem; font-weight: bold; cursor: pointer; border: 1px solid #888; background-color: #f4f4f4; }
+    table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
     th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
     th { background-color: #f2f2f2; }
-    input, select, button, textarea { width: 100%; padding: 0.3rem; margin-bottom: 0.5rem; }
-    .form-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-    .btn-row { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 1rem; }
-    .btn { padding: 0.5rem 1rem; font-weight: bold; cursor: pointer; }
   </style>
 </head>
 <body>
   <h2>Noah's College Lacrosse Tracker</h2>
   <form id="entryForm">
-    <div class="form-section">
-      <label for="university">University</label>
-      <input id="university" placeholder="University" name="university" required>
-      <label for="coachName">Coach Name</label>
-<input id="coachName" placeholder="Coach Name" name="coachName">
-      <label for="title">Title</label>
-<input id="title" placeholder="Title" name="title">
-      <label for="contactMethod">Contact Method</label>
-<select name="contactMethod" id="contactMethod"></select>
-      <label for="contactLocation">Contact Location</label>
-<input id="contactLocation" placeholder="Contact Location" name="contactLocation">
-      <label for="lastContactDate">Last Contact Date</label>
-<input id="lastContactDate" type="date" name="lastContactDate">
-      <label for="phone">Phone</label>
-<input id="phone" placeholder="Phone" name="phone">
-      <label for="email">Email</label>
-<input type="email" id="email" placeholder="Email" name="email">
-      <label for="level">Level</label>
-<select name="level" id="level"></select>
-      <label for="programTier">Program Tier</label>
-<select name="programTier" id="programTier"></select>
-      <label for="region">Region</label>
-<select name="region" id="region"></select>
-      <label for="majorFit">Major Fit</label>
-<select name="majorFit" id="majorFit"></select>
-      <label for="population">Population</label>
-<select name="population" id="population"></select>
-      <label for="visitPlanned">Visit Planned?</label>
-<select name="visitPlanned" id="visitPlanned"></select>
-      <label for="visitDate">Visit Date</label>
-<input id="visitDate" type="date" name="visitDate">
-      <label for="interest">Interest (1–10)</label>
-<input id="interest" type="number" min="1" max="10" name="interest" placeholder="Interest (1–10)">
-      <label for="notes">Notes</label>
-<textarea id="notes" name="notes" placeholder="Notes"></textarea>
-    </div>
+    <fieldset>
+      <legend>Coach & Contact Info</legend>
+      <div class="field-grid">
+        <div><label for="university">University</label><input id="university" name="university" required></div>
+        <div><label for="coachName">Coach Name</label><input id="coachName" name="coachName"></div>
+        <div><label for="title">Title</label><input id="title" name="title"></div>
+        <div><label for="contactMethod">Contact Method</label><select id="contactMethod" name="contactMethod"></select></div>
+        <div><label for="contactLocation">Contact Location</label><input id="contactLocation" name="contactLocation"></div>
+        <div><label for="lastContactDate">Last Contact Date</label><input type="date" id="lastContactDate" name="lastContactDate"></div>
+        <div><label for="phone">Phone</label><input id="phone" name="phone"></div>
+        <div><label for="email">Email</label><input type="email" id="email" name="email"></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Program Info</legend>
+      <div class="field-grid">
+        <div><label for="level">Level</label><select id="level" name="level"></select></div>
+        <div><label for="programTier">Program Tier</label><select id="programTier" name="programTier"></select></div>
+        <div><label for="region">Region</label><select id="region" name="region"></select></div>
+        <div><label for="majorFit">Major Fit</label><select id="majorFit" name="majorFit"></select></div>
+        <div><label for="population">Population</label><select id="population" name="population"></select></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Visit & Interest</legend>
+      <div class="field-grid">
+        <div><label for="visitPlanned">Visit Planned?</label><select id="visitPlanned" name="visitPlanned"></select></div>
+        <div><label for="visitDate">Visit Date</label><input type="date" id="visitDate" name="visitDate"></div>
+        <div><label for="interest">Interest (1–10)</label><input type="number" min="1" max="10" id="interest" name="interest" placeholder="Interest (1–10)"></div>
+        <div><label for="notes">Notes</label><textarea id="notes" name="notes" rows="2" placeholder="Notes"></textarea></div>
+      </div>
+    </fieldset>
+
     <div class="btn-row">
       <button type="submit" class="btn">➕ Add to Tracker</button>
       <button type="button" class="btn" onclick="saveToLocal()">💾 Save</button>
