@@ -71,7 +71,7 @@
       <tr>
         <th>University</th><th>Coach Name</th><th>Title</th><th>Contact Method</th><th>Contact Location</th><th>Last Contact Date</th>
         <th>Phone</th><th>Email</th><th>Level</th><th>Program Tier</th><th>Region</th><th>Major Fit</th>
-        <th>Population</th><th>Visit Planned?</th><th>Visit Date</th><th>Interest</th><th>Notes</th>
+        <th>Population</th><th>Visit Planned?</th><th>Visit Date</th><th>Interest</th><th>Notes</th><th>Actions</th>
       </tr>
     </thead>
     <tbody id="trackerBody"></tbody>
@@ -107,14 +107,31 @@
         td.textContent = data[key];
         row.appendChild(td);
       });
+            const editBtn = document.createElement('button');
+      editBtn.textContent = '✏️ Edit';
+      editBtn.onclick = () => populateFormFromRow(row);
+
+      const actionCell = document.createElement('td');
+      actionCell.appendChild(editBtn);
+      row.appendChild(actionCell);
       tbody.appendChild(row);
     }
 
+        let editingRow = null;
     document.getElementById('entryForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const formData = new FormData(this);
       const entry = Object.fromEntries(formData.entries());
-      addRow(entry);
+            if (editingRow) {
+        const cells = editingRow.querySelectorAll('td');
+        let i = 0;
+        for (const value of Object.values(entry)) {
+          cells[i++].textContent = value;
+        }
+        editingRow = null;
+      } else {
+        addRow(entry);
+      }
       this.reset();
     });
 
@@ -136,6 +153,16 @@
         };
         addRow(obj);
       });
+    }
+
+        function populateFormFromRow(row) {
+      const cells = row.querySelectorAll('td');
+      const form = document.getElementById('entryForm');
+      const fields = form.querySelectorAll('input, select, textarea');
+      for (let i = 0; i < fields.length; i++) {
+        fields[i].value = cells[i].textContent;
+      }
+      editingRow = row;
     }
 
     function exportToCSV() {
